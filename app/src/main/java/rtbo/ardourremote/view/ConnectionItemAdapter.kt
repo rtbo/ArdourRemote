@@ -1,5 +1,6 @@
 package rtbo.ardourremote.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -9,6 +10,11 @@ import rtbo.ardourremote.databinding.ConnectionItemBinding
 
 class ConnectionListAdapter : RecyclerView.Adapter<ConnectionViewHolder>() {
     var itemViewModels: List<ConnectionItemViewModel> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectionViewHolder {
         val binding  = ConnectionItemBinding.inflate(

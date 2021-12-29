@@ -14,17 +14,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : ViewModel() {
-    private val _data = MutableLiveData<List<ConnectionItemViewModel>>()
+    private val _connections = MutableLiveData<List<ConnectionItemViewModel>>()
 
-    val data: LiveData<List<ConnectionItemViewModel>>
-        get() = _data
+    val connections: LiveData<List<ConnectionItemViewModel>>
+        get() = _connections
 
     init {
         loadData()
     }
-
-    val hasConnections: Boolean
-        get() = data.value?.isNotEmpty() ?: false
 
     private fun loadData() {
         viewModelScope.launch {
@@ -35,7 +32,7 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
                     lastUsedString(it.lastUsed),
                 )
             }
-            _data.postValue(connections)
+            _connections.postValue(connections)
         }
     }
 
