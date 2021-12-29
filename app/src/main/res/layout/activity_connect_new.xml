@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="model"
+            type="rtbo.ardourremote.view.ConnectNewViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.ConnectNewActivity"
+        >
+
+        <TextView
+            android:id="@+id/new_connection_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/new_connection"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <!--
+            NAME
+        -->
+        <TextView
+            android:id="@+id/name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:labelFor="@id/name_edit"
+            android:text="@string/name_optional"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/name_edit"
+            app:layout_constraintTop_toTopOf="@+id/name_edit" />
+
+        <EditText
+            android:id="@+id/name_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="108dp"
+            android:layout_marginTop="4dp"
+            android:ems="10"
+            android:text="@={model.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_connection_title"
+            tools:text="Laptop"
+            />
+
+        <!--
+            HOST
+        -->
+        <TextView
+            android:id="@+id/host_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/host_edit"
+            android:text="@string/host"
+            app:layout_constraintBaseline_toBaselineOf="@+id/host_edit"
+            app:layout_constraintStart_toStartOf="@+id/name_label" />
+
+        <EditText
+            android:id="@+id/host_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@={model.host}"
+            app:layout_constraintStart_toStartOf="@+id/name_edit"
+            app:layout_constraintTop_toBottomOf="@+id/name_edit"
+            tools:text="192.168.1.39"
+            />
+
+        <!--
+            SEND PORT
+        -->
+        <TextView
+            android:id="@+id/send_port_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/send_port_edit"
+            android:text="@string/send_port"
+            app:layout_constraintBaseline_toBaselineOf="@+id/send_port_edit"
+            app:layout_constraintStart_toStartOf="@+id/name_label" />
+
+        <EditText
+            android:id="@+id/send_port_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@={`` + model.sendPort}"
+            app:layout_constraintStart_toStartOf="@+id/host_edit"
+            app:layout_constraintTop_toBottomOf="@+id/host_edit"
+            tools:text="3819"
+            />
+
+        <!--
+            RCV PORT
+        -->
+        <TextView
+            android:id="@+id/rcv_port_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/receive_port"
+            app:layout_constraintBaseline_toBaselineOf="@+id/rcv_port_edit"
+            app:layout_constraintStart_toStartOf="@+id/name_label" />
+
+        <EditText
+            android:id="@+id/rcv_port_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@={`` + model.rcvPort}"
+            app:layout_constraintStart_toStartOf="@+id/send_port_edit"
+            app:layout_constraintTop_toBottomOf="@+id/send_port_edit"
+            tools:text="8000"
+            />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/connect"
+            android:onClick="@{() -> model.connect()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rcv_port_edit"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Ardour Remote</string>
+    <string name="new_connection">New Connection</string>
+    <string name="host">Host</string>
+    <string name="recent_connections">Recent Connections</string>
+    <string name="default_ip">192.168.</string>
+    <string name="edit_connection">Edit Connection</string>
+    <string name="delete_connection">Delete Connection</string>
+    <string name="name">Name</string>
+    <string name="name_optional">Name\n(optional)</string>
+    <string name="create">Create</string>
+    <string name="connect">Connect</string>
+    <string name="receive_port">Receive Port</string>
+    <string name="send_port">Send Port</string>
+    <string name="add_new_connection">Add new connection</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
