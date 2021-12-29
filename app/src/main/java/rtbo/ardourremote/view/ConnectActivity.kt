@@ -20,7 +20,6 @@ class ConnectActivity : AppCompatActivity() {
         val list = findViewById<RecyclerView>(R.id.recent_connection_list)
         val listAdapter = ConnectionListAdapter()
         viewModel.connections.observe(this, {
-            Log.d("CONNECT", "${it.size} connection(s)")
             if (it.isEmpty()) {
                 val intent = Intent(this, ConnectNewActivity::class.java)
                 startActivity(intent)

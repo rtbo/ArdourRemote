@@ -3,9 +3,7 @@ package rtbo.ardourremote.view
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import rtbo.ardourremote.BR
 import rtbo.ardourremote.databinding.ConnectionItemBinding
 
 class ConnectionListAdapter : RecyclerView.Adapter<ConnectionViewHolder>() {
@@ -36,5 +34,6 @@ class ConnectionViewHolder(private val binding: ConnectionItemBinding): Recycler
 {
     fun bind(vm: ConnectionItemViewModel) {
         binding.model = vm
+        binding.executePendingBindings()
     }
 }
