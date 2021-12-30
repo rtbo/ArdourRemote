@@ -16,16 +16,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : ViewModel(),
     ConnectionItemActions {
+
     private val _connections = MutableLiveData<List<ConnectionItemViewModel>>()
-
-    val newName = MutableLiveData<String>("Laptop")
-    val newHost = MutableLiveData<String>("192.168.1.40")
-    val newSendPort = MutableLiveData<Int>(3819)
-    val newRcvPort = MutableLiveData<Int>(8000)
-
 
     val connections: LiveData<List<ConnectionItemViewModel>>
         get() = _connections
+
+    val newName = MutableLiveData<String>("Laptop")
+    val newHost = MutableLiveData<String>("192.168.1.23")
+    val newSendPort = MutableLiveData<Int>(3819)
+    val newRcvPort = MutableLiveData<Int>(8000)
 
     init {
         viewModelScope.launch {
