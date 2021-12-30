@@ -14,4 +14,8 @@ class ConnectionRepo @Inject constructor(private val dao: ConnectionDao) {
     suspend fun insert(connection: Connection) = withContext(Dispatchers.IO) {
         dao.insert(connection)
     }
+
+    suspend fun deleteById(id: Long) = withContext(Dispatchers.IO) {
+        dao.deleteById(id)
+    }
 }

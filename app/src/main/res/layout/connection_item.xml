@@ -5,7 +5,11 @@
     >
 
     <data>
-        <variable name="model" type="rtbo.ardourremote.view.ConnectionItemViewModel" />
+
+        <variable
+            name="model"
+            type="rtbo.ardourremote.view.ConnectionItemViewModel"
+            />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-        tools:ignore="RtlHardcoded,RtlSymmetry">
+        tools:ignore="RtlHardcoded,RtlSymmetry"
+        >
 
         <TextView
             android:id="@+id/name_or_host"
@@ -25,7 +30,8 @@
             android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Name" />
+            tools:text="Name"
+            />
 
         <TextView
             android:id="@+id/human_desc"
@@ -37,7 +43,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name_or_host"
             app:layout_constraintTop_toBottomOf="@id/name_or_host"
-            tools:text="192.168.1.1\u21918319\u21938000" />
+            tools:text="192.168.1.1\u21918319\u21938000"
+            />
 
         <TextView
             android:id="@+id/last_used"
@@ -48,7 +55,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="used\nJan. 23rd" />
+            tools:text="used\nJan. 23rd"
+            />
 
         <ImageButton
             android:id="@+id/deleteBtn"
@@ -59,27 +67,14 @@
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/delete_connection"
             android:focusable="false"
+            android:onClick="@{() -> model.actions.deleteItem(model.pos)}"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_baseline_delete_24"
-            app:layout_constraintDimensionRatio="W,1:1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/editBtn"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/editBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/edit_connection"
-            android:focusable="false"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_baseline_edit_24"
             app:layout_constraintDimensionRatio="W,1:1"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import rtbo.ardourremote.databinding.ConnectionItemBinding
 
 class ConnectionListAdapter : RecyclerView.Adapter<ConnectionViewHolder>() {
-    var itemViewModels: List<ConnectionItemViewModel> = emptyList()
+
+    var connections: List<ConnectionItemViewModel> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -24,10 +25,10 @@ class ConnectionListAdapter : RecyclerView.Adapter<ConnectionViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ConnectionViewHolder, position: Int) {
-        holder.bind(itemViewModels[position])
+        holder.bind(connections[position])
     }
 
-    override fun getItemCount(): Int = itemViewModels.size
+    override fun getItemCount(): Int = connections.size
 }
 
 class ConnectionViewHolder(private val binding: ConnectionItemBinding): RecyclerView.ViewHolder(binding.root)

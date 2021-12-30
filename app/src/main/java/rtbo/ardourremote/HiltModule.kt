@@ -2,6 +2,7 @@ package rtbo.ardourremote
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,12 @@ object ArdourRemoteModule {
     @Provides
     fun provideDatabase(
         @ApplicationContext app: Context
-    ) = Room.databaseBuilder(app, ArdourRemoteDatabase::class.java, "ardour_remote").build()
+    ): ArdourRemoteDatabase {
+        if (BuildConfig.DELETE_DB) {
+            app.deleteDatabase("ardour_remote")
+        }
+        return Room.databaseBuilder(app, ArdourRemoteDatabase::class.java, "ardour_remote").build()
+    }
 
     @Singleton
     @Provides

@@ -16,12 +16,22 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+        buildConfigField("Boolean", "DELETE_DB", "false")
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField("Boolean", "DELETE_DB", "true")
         }
     }
 
@@ -44,10 +54,12 @@ dependencies {
     def lifecycle_version = "2.4.0"
     def room_version = "2.4.0"
     def hilt_version = "2.38.1"
+    def fragment_version = "1.4.0"
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.activity:activity-ktx:$activity_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'com.google.android.material:material:1.4.0'

@@ -18,7 +18,7 @@ class Converters {
     }
 }
 
-@Database(entities = [Connection::class], exportSchema = true, version = 1)
+@Database(entities = [Connection::class], exportSchema = true, version = 2)
 @TypeConverters(Converters::class)
 abstract class ArdourRemoteDatabase: RoomDatabase() {
     abstract fun connectionDao(): ConnectionDao

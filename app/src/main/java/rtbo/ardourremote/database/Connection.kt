@@ -3,14 +3,14 @@ package rtbo.ardourremote.database
 import androidx.room.*
 import java.util.*
 
-@Entity
+@Entity(tableName = "connection")
 data class Connection(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "host") val host: String,
     @ColumnInfo(name = "send_port") val sendPort: Int = 3819,
     @ColumnInfo(name = "rcv_port") val rcvPort: Int = 8000,
     @ColumnInfo(name = "last_used") val lastUsed: Date = Date(),
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
 ) {
 }
 
@@ -21,4 +21,7 @@ interface ConnectionDao {
 
     @Insert
     suspend fun insert(connection: Connection): Long
+
+    @Query("DELETE FROM connection WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }
