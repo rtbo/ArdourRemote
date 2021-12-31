@@ -1,9 +1,6 @@
 package rtbo.ardourremote.view
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import rtbo.ardourremote.database.Connection
@@ -17,15 +14,19 @@ import javax.inject.Inject
 class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : ViewModel(),
     ConnectionItemActions {
 
-    private val _connections = MutableLiveData<List<ConnectionItemViewModel>>()
+    private val _connections = MutableLiveData<MutableList<ConnectionItemViewModel>>()
+    private val _newConn = MutableLiveData<Connection>()
 
-    val connections: LiveData<List<ConnectionItemViewModel>>
-        get() = _connections
+    val connections: LiveData<List<ConnectionItemViewModel>> = _connections.map {
+        it
+    }
 
     val newName = MutableLiveData<String>("Laptop")
     val newHost = MutableLiveData<String>("192.168.1.23")
     val newSendPort = MutableLiveData<Int>(3819)
     val newRcvPort = MutableLiveData<Int>(8000)
+
+    val newConn: LiveData<Connection> = _newConn
 
     init {
         viewModelScope.launch {
@@ -34,22 +35,27 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
     }
 
     private suspend fun loadData() {
-        val connections = repo.getAll().mapIndexed { idx, it ->
-            ConnectionItemViewModel(
-                idx,
-                it.id,
-                if (it.name.isNotEmpty()) {
-                    it.name
-                } else {
-                    it.host
-                },
-                "${it.host}\u2191${it.sendPort}\u2193${it.rcvPort}",
-                lastUsedString(it.lastUsed),
-                this,
-            )
+        val connections = repo.getAll()
+        val connectionModels = ArrayList<ConnectionItemViewModel>()
+        for ((idx, c) in connections.withIndex()) {
+            connectionModels.add(mapConnectionModel(idx, c))
         }
-        _connections.postValue(connections)
+        _connections.postValue(connectionModels)
     }
+
+    private fun mapConnectionModel(idx: Int, conn: Connection): ConnectionItemViewModel =
+        ConnectionItemViewModel(
+            idx,
+            conn.id,
+            if (conn.name.isNotEmpty()) {
+                conn.name
+            } else {
+                conn.host
+            },
+            conn.humanDesc,
+            lastUsedString(conn.lastUsed),
+            this,
+        )
 
     private val dateFormat: DateFormat by lazy {
         SimpleDateFormat("MMM d", Locale.getDefault())
@@ -64,14 +70,6 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
         }
     }
 
-    override fun deleteItem(itemPos: Int) {
-        val conn = _connections.value?.get(itemPos)!!
-        viewModelScope.launch {
-            repo.deleteById(conn.id)
-            loadData()
-        }
-    }
-
     fun connectNew() {
         val connection = Connection(
             newName.value ?: "",
@@ -80,8 +78,23 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
             newRcvPort.value!!
         )
         viewModelScope.launch {
-            repo.insert(connection)
-            loadData()
+            val newId = repo.insert(connection)
+            val newConn = repo.getById(newId)!!
+            _newConn.postValue(newConn)
+            val conns = _connections.value!!
+            val connModel = mapConnectionModel(conns.size, newConn)
+            conns.add(connModel)
+            _connections.postValue(conns)
+        }
+    }
+
+    override fun deleteItem(itemPos: Int) {
+        viewModelScope.launch {
+            val conns = _connections.value!!
+            val conn = conns[itemPos]
+            repo.deleteById(conn.id)
+            conns.removeAt(itemPos)
+            _connections.postValue(conns)
         }
     }
 }
