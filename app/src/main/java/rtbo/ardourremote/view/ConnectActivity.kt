@@ -16,13 +16,13 @@ class ConnectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_connect)
 
         viewModel.connections.observe(this, {
-            val fragment = if (it.isEmpty()) {
-                ConnectNewFragment(viewModel)
-            } else {
-                ConnectRecentFragment(viewModel)
-            }
+            val useRecent = it.isNotEmpty()
             supportFragmentManager.commit {
-                replace(R.id.connect_fragment_container, fragment)
+                if (useRecent) {
+                    add(R.id.connect_fragment_container, ConnectRecentFragment::class.java, null)
+                } else {
+                    add(R.id.connect_fragment_container, ConnectNewFragment::class.java, null)
+                }
                 setReorderingAllowed(true)
             }
         })
