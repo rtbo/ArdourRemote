@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import rtbo.ardourremote.database.Connection
-import rtbo.ardourremote.osc.OscConnection
+import rtbo.ardourremote.osc.OscRemote
 import rtbo.ardourremote.osc.OscSocketParams
 import rtbo.ardourremote.repository.ConnectionRepo
 import javax.inject.Inject
@@ -16,9 +16,10 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         private const val TAG = "REMOTE"
     }
 
+    private val remote = OscRemote()
+
     private val _connection = MutableLiveData<Connection>()
-    private val _connected = MediatorLiveData<Boolean>()
-    private var _oscConnection: OscConnection? = null
+    private val _connected: LiveData<Boolean> = remote.connected
     private var _connectionRequested = false
     private var _connId = -1L
 
@@ -27,12 +28,26 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
     }
     val connected: LiveData<Boolean> = _connected
 
+    fun setConnectionId(id: Long) {
+        if (id == _connId)
+            return
+        viewModelScope.launch {
+            val conn = repo.getById(id)!!
+            _connection.postValue(conn)
+            _connId = conn.id
+
+            if (_connectionRequested) {
+                _connectionRequested = false
+                doConnect(conn)
+            }
+        }
+    }
+
     fun connect() {
         viewModelScope.launch {
-            val oscConn = _oscConnection
-            if (oscConn != null) {
-                Log.d(TAG, "Connection to ${humanDesc.value}")
-                oscConn.connect()
+            val conn = _connection.value
+            if (conn != null) {
+                doConnect(conn)
             } else {
                 // even if setConnectionId() is called before connect(), it can be raced out
                 // because fetching connection from repo is long.
@@ -42,38 +57,29 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         }
     }
 
+    private suspend fun doConnect(conn: Connection) {
+        Log.d(TAG, "Connection to ${conn.humanDesc}")
+        val params = OscSocketParams(conn.host, conn.sendPort, conn.rcvPort)
+        remote.connect(params)
+        repo.updateLastUsedById(conn.id)
+    }
+
     fun disconnect() {
         viewModelScope.launch {
-            _oscConnection?.disconnect()
+            remote.disconnect()
+            repo.updateLastUsedById(_connId)
         }
     }
 
-    fun setConnectionId(id: Long) {
-        if (id == _connId)
-            return
-        _connId = id
+    fun transportPlay() {
         viewModelScope.launch {
-            val conn = repo.getById(id)!!
-            _connection.postValue(conn)
+            remote.transportPlay()
+        }
+    }
 
-            val oldOscConn = _oscConnection
-            if (oldOscConn != null) {
-                _connected.removeSource(oldOscConn.connected)
-                oldOscConn.disconnect()
-            }
-
-            val params = OscSocketParams(conn.host, conn.sendPort, conn.rcvPort)
-            val oscConn = OscConnection(params)
-            _oscConnection = oscConn
-            _connected.addSource(oscConn.connected) {
-                _connected.value = it
-            }
-
-            if (_connectionRequested) {
-                Log.d(TAG, "Connection to ${conn.humanDesc}")
-                oscConn.connect()
-                _connectionRequested = false
-            }
+    fun recordToggle() {
+        viewModelScope.launch {
+            remote.recordToggle()
         }
     }
 

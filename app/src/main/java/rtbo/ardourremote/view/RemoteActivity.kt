@@ -20,13 +20,8 @@ class RemoteActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         setContentView(binding.root)
 
-        if (savedInstanceState != null) {
-            val id = savedInstanceState.getSerializable(REMOTE_CONN_ID_KEY).toString().toLong()
-            viewModel.setConnectionId(id)
-        } else {
-            val id = intent.extras?.getLong(REMOTE_CONN_ID_KEY)!!
-            viewModel.setConnectionId(id)
-        }
+        val id = intent.extras?.getLong(REMOTE_CONN_ID_KEY)!!
+        viewModel.setConnectionId(id)
     }
 
     override fun onStart() {

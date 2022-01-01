@@ -11,7 +11,9 @@ sealed class OscAtomic {
         fun decode(typeTag: Char, buffer: ByteBuffer): OscAtomic {
             return when (typeTag) {
                 'i' -> OscInt(buffer.int)
+                'h' -> OscLong(buffer.long)
                 'f' -> OscFloat(buffer.float)
+                'd' -> OscDouble(buffer.double)
                 's' -> OscString.decode(buffer)
                 'b' -> OscBlob.decode(buffer)
                 else -> throw Exception("Unsupported OSC atomic type: '$typeTag'")
@@ -31,6 +33,17 @@ data class OscInt(val value: Int) : OscAtomic() {
     }
 }
 
+data class OscLong(val value: Long) : OscAtomic() {
+    override val tagLen = Pair('h', 8)
+    override fun encode(buffer: ByteBuffer) {
+        buffer.putLong(value)
+    }
+
+    override fun toString(): String {
+        return "h:$value"
+    }
+}
+
 data class OscFloat(val value: Float) : OscAtomic() {
     override val tagLen = Pair('f', 4)
     override fun encode(buffer: ByteBuffer) {
@@ -39,6 +52,17 @@ data class OscFloat(val value: Float) : OscAtomic() {
 
     override fun toString(): String {
         return "f:$value"
+    }
+}
+
+data class OscDouble(val value: Double) : OscAtomic() {
+    override val tagLen = Pair('d', 8)
+    override fun encode(buffer: ByteBuffer) {
+        buffer.putDouble(value)
+    }
+
+    override fun toString(): String {
+        return "d:$value"
     }
 }
 

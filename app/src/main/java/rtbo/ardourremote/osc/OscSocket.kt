@@ -65,6 +65,7 @@ class OscSocketUDP(params: OscSocketParams) : OscSocket(params) {
                     rcvSocket.receive(pkt)
                     Log.d("SOCKET", "received ${pkt.length}")
                     val msg = oscPacketToMessage(buf, 0, pkt.length)
+                    Log.d("SOCKET", "filling channel $msg")
                     channel.send(msg)
                 } catch (ex: SocketTimeoutException) {
                 } catch (ex: CancellationException) {
