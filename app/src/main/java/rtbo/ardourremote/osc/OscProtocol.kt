@@ -7,6 +7,20 @@ sealed class OscAtomic {
     abstract val tagLen: Pair<Char, Int>
     abstract fun encode(buffer: ByteBuffer)
 
+    open val isInt = false
+    open val isLong = false
+    open val isFloat = false
+    open val isDouble = false
+    open val isString = false
+    open val isBlob = false
+
+    open val int: Int? = null
+    open val long: Long? = null
+    open val float: Float? = null
+    open val double: Double? = null
+    open val string: String? = null
+    open val blob: ByteArray? = null
+
     companion object {
         fun decode(typeTag: Char, buffer: ByteBuffer): OscAtomic {
             return when (typeTag) {
@@ -28,6 +42,12 @@ data class OscInt(val value: Int) : OscAtomic() {
         buffer.putInt(value)
     }
 
+    override val isInt = true
+    override val int = value
+    override val long = value.toLong()
+    override val float = value.toFloat()
+    override val double = value.toDouble()
+
     override fun toString(): String {
         return "i:$value"
     }
@@ -38,6 +58,12 @@ data class OscLong(val value: Long) : OscAtomic() {
     override fun encode(buffer: ByteBuffer) {
         buffer.putLong(value)
     }
+
+    override val isLong = true
+    override val long = value
+    override val int = value.toInt()
+    override val float = value.toFloat()
+    override val double = value.toDouble()
 
     override fun toString(): String {
         return "h:$value"
@@ -50,6 +76,10 @@ data class OscFloat(val value: Float) : OscAtomic() {
         buffer.putFloat(value)
     }
 
+    override val isFloat = true
+    override val float = value
+    override val double = value.toDouble()
+
     override fun toString(): String {
         return "f:$value"
     }
@@ -61,19 +91,16 @@ data class OscDouble(val value: Double) : OscAtomic() {
         buffer.putDouble(value)
     }
 
+    override val isDouble = true
+    override val double = value
+    override val float = value.toFloat()
+
     override fun toString(): String {
         return "d:$value"
     }
 }
 
 data class OscString(val value: String) : OscAtomic() {
-    init {
-        for (c in value) {
-            if (c.code > 127) {
-                throw Exception("\"${value}\" is not ASCII!")
-            }
-        }
-    }
 
     override val tagLen = Pair(
         's',
@@ -82,11 +109,14 @@ data class OscString(val value: String) : OscAtomic() {
 
     override fun encode(buffer: ByteBuffer) {
         var numNulls = alignUp(value.length + 1) - value.length
-        buffer.put(value.toByteArray(Charsets.US_ASCII))
+        buffer.put(value.toByteArray(Charsets.UTF_8))
         while ((numNulls--) > 0) {
             buffer.put(0.toByte())
         }
     }
+
+    override val isString = true
+    override val string = value
 
     override fun toString(): String {
         return "s:\"$value\""
@@ -150,6 +180,9 @@ data class OscBlob(val value: ByteArray) : OscAtomic() {
             numNulls--
         }
     }
+
+    override val isBlob = true
+    override val blob = value
 
     override fun toString(): String {
         return "b:[${value.size} bytes]"

@@ -1,10 +1,5 @@
 package rtbo.ardourremote.osc
 
-import android.util.Log
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -18,11 +13,12 @@ data class OscSocketParams(
 
 sealed class OscSocket(val params: OscSocketParams) {
     abstract fun close()
-    abstract suspend fun sendMessage(msg: OscMessage)
-    abstract suspend fun receiveMessages(channel: SendChannel<OscMessage>)
+    abstract fun sendMessage(msg: OscMessage)
+    abstract fun receiveMessage(): OscMessage?
 }
 
 class OscSocketUDP(params: OscSocketParams) : OscSocket(params) {
+
     private val sendSocket: DatagramSocket by lazy {
         DatagramSocket()
     }
@@ -32,6 +28,10 @@ class OscSocketUDP(params: OscSocketParams) : OscSocket(params) {
         sock.reuseAddress = true
         sock.soTimeout = 1000
         sock
+    }
+
+    private val rcvBuf: ByteArray by lazy {
+        ByteArray(MAX_MSG_SIZE)
     }
 
     private val hostAddress: InetAddress by lazy {
@@ -45,33 +45,19 @@ class OscSocketUDP(params: OscSocketParams) : OscSocket(params) {
         rcvSocket.close()
     }
 
-    override suspend fun sendMessage(msg: OscMessage) {
+    override fun sendMessage(msg: OscMessage) {
         val arr = oscMessageToPacket(msg)
-
-        withContext(Dispatchers.IO) {
-            sendSocket.send(DatagramPacket(arr, arr.size, hostAddress, params.sendPort))
-        }
+        sendSocket.send(DatagramPacket(arr, arr.size, hostAddress, params.sendPort))
     }
 
-    override suspend fun receiveMessages(channel: SendChannel<OscMessage>) {
-        withContext(Dispatchers.IO) {
-            val buf = ByteArray(MAX_MSG_SIZE)
-            while (true) {
-                val pkt = DatagramPacket(buf, buf.size)
-                try {
-                    if (channel.isClosedForSend) {
-                        break
-                    }
-                    rcvSocket.receive(pkt)
-                    Log.d("SOCKET", "received ${pkt.length}")
-                    val msg = oscPacketToMessage(buf, 0, pkt.length)
-                    Log.d("SOCKET", "filling channel $msg")
-                    channel.send(msg)
-                } catch (ex: SocketTimeoutException) {
-                } catch (ex: CancellationException) {
-                    break
-                }
-            }
+    override fun receiveMessage(): OscMessage? {
+        val buf = rcvBuf
+        val pkt = DatagramPacket(buf, buf.size)
+        return try {
+            rcvSocket.receive(pkt)
+            oscPacketToMessage(buf, 0, pkt.length)
+        } catch (ex: SocketTimeoutException) {
+            null
         }
     }
 }

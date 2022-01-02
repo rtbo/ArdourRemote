@@ -10,23 +10,81 @@ import rtbo.ardourremote.osc.OscSocketParams
 import rtbo.ardourremote.repository.ConnectionRepo
 import javax.inject.Inject
 
+enum class RecordBtnStyle {
+    OFF,
+    BLINK,
+    SOLID,
+}
+
 @HiltViewModel
 class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : ViewModel() {
     companion object {
         private const val TAG = "REMOTE"
     }
 
-    private val remote = OscRemote()
+    private val remote = OscRemote(viewModelScope)
 
     private val _connection = MutableLiveData<Connection>()
-    private val _connected: LiveData<Boolean> = remote.connected
     private var _connectionRequested = false
     private var _connId = -1L
 
-    val humanDesc: LiveData<String> = _connection.map {
+    val connectionDesc: LiveData<String> = _connection.map {
         it.humanDesc
     }
-    val connected: LiveData<Boolean> = _connected
+
+    //    val connected = remote.connected
+    val playing = remote.playing
+    val stopped = remote.stopped
+
+    //    val speed = remote.speed
+//    val recordEnabled = remote.recordEnabled
+    val timecode = remote.timecode
+    val bbt = remote.bbt
+
+    val speedTxt: LiveData<String> = remote.speed.map {
+        Log.d(TAG, "speed update $it")
+        if (it != 0.0f && it != 1.0f) {
+            "x $it"
+        } else {
+            ""
+        }
+    }
+
+    val recordBtnStyle = MediatorLiveData<RecordBtnStyle>().apply {
+        fun update() {
+            Log.d(TAG, "RecordBtnStyle update")
+            val play = remote.playing.value ?: return
+            val record = remote.recordEnabled.value ?: return
+
+            value = if (!record) {
+                RecordBtnStyle.OFF
+            } else {
+                if (play) {
+                    RecordBtnStyle.SOLID
+                } else {
+                    RecordBtnStyle.BLINK
+                }
+            }
+        }
+
+        addSource(remote.playing) { update() }
+        addSource(remote.recordEnabled) { update() }
+
+        value = RecordBtnStyle.OFF
+    }
+
+    val stopTrashEnabled = MediatorLiveData<Boolean>().apply {
+        fun update() {
+            Log.d(TAG, "Stop trash update")
+            val play = remote.playing.value ?: return
+            val record = remote.recordEnabled.value ?: return
+
+            value = play && record
+        }
+        addSource(remote.playing) { update() }
+        addSource(remote.recordEnabled) { update() }
+        value = false
+    }
 
     fun setConnectionId(id: Long) {
         if (id == _connId)
@@ -71,15 +129,27 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         }
     }
 
-    fun transportPlay() {
+    fun play() {
         viewModelScope.launch {
             remote.transportPlay()
+        }
+    }
+
+    fun stop() {
+        viewModelScope.launch {
+            remote.transportStop()
         }
     }
 
     fun recordToggle() {
         viewModelScope.launch {
             remote.recordToggle()
+        }
+    }
+
+    fun stopTrash() {
+        viewModelScope.launch {
+            remote.stopAndForget()
         }
     }
 

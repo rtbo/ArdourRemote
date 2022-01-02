@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="position_txt">#45A045</color>
+    <color name="play_enabled">#30B030</color>
+    <color name="play_disabled">#304030</color>
+    <color name="stop_enabled">#4080FF</color>
+    <color name="stop_disabled">#305090</color>
+    <color name="rec_enabled">#D03030</color>
+    <color name="rec_disabled">#503030</color>
 </resources>
