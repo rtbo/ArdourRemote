@@ -19,9 +19,9 @@ class ConnectActivity : AppCompatActivity() {
             val useRecent = it.isNotEmpty()
             supportFragmentManager.commit {
                 if (useRecent) {
-                    add(R.id.connect_fragment_container, ConnectRecentFragment::class.java, null)
+                    replace(R.id.connect_fragment_container, ConnectRecentFragment::class.java, null)
                 } else {
-                    add(R.id.connect_fragment_container, ConnectNewFragment::class.java, null)
+                    replace(R.id.connect_fragment_container, ConnectNewFragment::class.java, null)
                 }
                 setReorderingAllowed(true)
             }
