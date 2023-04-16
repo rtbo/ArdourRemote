@@ -24,6 +24,8 @@ const val FEEDBACK_PLAYHEAD_GUI = 4096
 const val FEEDBACK_EXTRA_SELECT_FEEDBACK = 8192
 const val FEEDBACK_LEGACY_REPLY = 16384
 
+const val ARDOUR_DELAY_MS: Long = 100
+
 class OscRemote(private val scope: CoroutineScope) {
     private var _socket: OscSocket? = null
     private var _receiveJob: Job? = null
@@ -87,30 +89,35 @@ class OscRemote(private val scope: CoroutineScope) {
 
     suspend fun transportPlay() {
         sendMessage(OscMessage("/transport_play"))
+        delay(ARDOUR_DELAY_MS)
         sendMessage(OscMessage("/transport_speed"))
         sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun transportStop() {
         sendMessage(OscMessage("/transport_stop"))
+        delay(ARDOUR_DELAY_MS)
         sendMessage(OscMessage("/transport_speed"))
         sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun stopAndForget() {
         sendMessage(OscMessage("/stop_forget"))
+        delay(ARDOUR_DELAY_MS)
         sendMessage(OscMessage("/transport_speed"))
         sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun recordToggle() {
         sendMessage(OscMessage("/rec_enable_toggle"))
+        delay(ARDOUR_DELAY_MS)
         sendMessage(OscMessage("/record_enabled"))
     }
 
     private suspend fun sendInitialStateQuery() {
         val feedback = FEEDBACK_HEARTBEAT or FEEDBACK_PLAYHEAD_BBT or FEEDBACK_PLAYHEAD_TIME
         sendMessage(OscMessage("/set_surface/feedback", OscInt(feedback)))
+        delay(ARDOUR_DELAY_MS)
         sendMessage(OscMessage("/transport_speed"))
         sendMessage(OscMessage("/record_enabled"))
     }
