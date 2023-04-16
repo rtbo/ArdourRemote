@@ -53,18 +53,19 @@ class RemoteActivity : AppCompatActivity() {
             when (it) {
                 RecordBtnStyle.OFF -> {
                     blinkTimer?.cancel()
+                    blinkTimer = null
                     ImageViewCompat.setImageTintList(recBtn, recDisabled)
-                    Log.d("REMOTE_VIEW", "rec off")
                 }
                 RecordBtnStyle.SOLID -> {
                     blinkTimer?.cancel()
-                    Log.d("REMOTE_VIEW", "rec solid")
+                    blinkTimer = null
                     ImageViewCompat.setImageTintList(recBtn, recEnabled)
                 }
                 RecordBtnStyle.BLINK -> {
-                    Log.d("REMOTE_VIEW", "rec blink")
-                    blinkTimer = Timer()
-                    blinkTimer?.scheduleAtFixedRate(RecordBlink(blinkHandler), 0, 300)
+                    if (blinkTimer === null) {
+                        blinkTimer = Timer("Rec blink")
+                        blinkTimer?.scheduleAtFixedRate(RecordBlink(blinkHandler), 0, 300)
+                    }
                 }
                 null -> {}
             }
