@@ -1,5 +1,6 @@
 package rtbo.ardourremote.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,12 @@ class ConnectActivity : AppCompatActivity() {
                 }
                 setReorderingAllowed(true)
             }
+        }
+
+        viewModel.newConn.observe(this) {
+            val intent = Intent(this, RemoteActivity::class.java)
+            intent.putExtra(REMOTE_CONN_ID_KEY, it.id)
+            startActivity(intent)
         }
     }
 }

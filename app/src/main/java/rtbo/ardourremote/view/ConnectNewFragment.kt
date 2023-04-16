@@ -29,12 +29,6 @@ class ConnectNewFragment : Fragment() {
         connectBtn.setOnClickListener {
             viewModel.connectNew()
         }
-
-        viewModel.newConn.observe(this) {
-            val intent = Intent(activity, RemoteActivity::class.java)
-            intent.putExtra(REMOTE_CONN_ID_KEY, it.id)
-            startActivity(intent)
-        }
         return binding.root
     }
 }
