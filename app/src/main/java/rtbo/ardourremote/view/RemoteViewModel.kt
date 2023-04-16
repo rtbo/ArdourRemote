@@ -72,10 +72,8 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
                 }
             }
         }
-
         addSource(remote.playing) { update() }
         addSource(remote.recordEnabled) { update() }
-
         value = RecordBtnStyle.OFF
     }
 
