@@ -22,7 +22,7 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
     }
 
     val newName = MutableLiveData<String>("Laptop")
-    val newHost = MutableLiveData<String>("192.168.1.23")
+    val newHost = MutableLiveData<String>("192.168.1.64")
     val newSendPort = MutableLiveData<Int>(3819)
     val newRcvPort = MutableLiveData<Int>(8000)
 
