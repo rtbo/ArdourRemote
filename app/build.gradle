@@ -49,6 +49,7 @@ android {
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         ]
     }
+    namespace 'rtbo.ardourremote'
 }
 
 dependencies {
