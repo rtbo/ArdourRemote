@@ -95,6 +95,16 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
             _connections.postValue(conns)
         }
     }
+
+    override fun connectItem(itemPos: Int) {
+        viewModelScope.launch {
+            val conns = _connections.value!!
+            val connId = conns[itemPos].id
+            repo.getById(connId)?.let {
+                _newConn.postValue(it)
+            }
+        }
+    }
 }
 
 data class ConnectionItemViewModel(
@@ -108,4 +118,5 @@ data class ConnectionItemViewModel(
 
 interface ConnectionItemActions {
     fun deleteItem(itemPos: Int)
+    fun connectItem(itemPos: Int)
 }

@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:onClick="@{() -> model.actions.connectItem(model.pos)}"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         >
 
