@@ -60,8 +60,8 @@ data class OscLong(val value: Long) : OscAtomic() {
     }
 
     override val isLong = true
-    override val long = value
     override val int = value.toInt()
+    override val long = value
     override val float = value.toFloat()
     override val double = value.toDouble()
 
@@ -77,6 +77,8 @@ data class OscFloat(val value: Float) : OscAtomic() {
     }
 
     override val isFloat = true
+    override val int = value.toInt()
+    override val long = value.toLong()
     override val float = value
     override val double = value.toDouble()
 
@@ -92,8 +94,10 @@ data class OscDouble(val value: Double) : OscAtomic() {
     }
 
     override val isDouble = true
-    override val double = value
+    override val int = value.toInt()
+    override val long = value.toLong()
     override val float = value.toFloat()
+    override val double = value
 
     override fun toString(): String {
         return "d:$value"
