@@ -87,19 +87,20 @@ class OscRemote(private val scope: CoroutineScope) {
 
     suspend fun transportPlay() {
         sendMessage(OscMessage("/transport_play"))
-        //_playing.postValue(true)
-        //_stopped.postValue(false)
+        sendMessage(OscMessage("/transport_speed"))
+        sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun transportStop() {
         sendMessage(OscMessage("/transport_stop"))
-        _playing.postValue(false)
-        _stopped.postValue(true)
+        sendMessage(OscMessage("/transport_speed"))
+        sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun stopAndForget() {
         sendMessage(OscMessage("/stop_forget"))
         sendMessage(OscMessage("/transport_speed"))
+        sendMessage(OscMessage("/record_enabled"))
     }
 
     suspend fun recordToggle() {
