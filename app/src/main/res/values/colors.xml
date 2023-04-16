@@ -10,8 +10,10 @@
     <color name="position_txt">#45A045</color>
     <color name="play_enabled">#30B030</color>
     <color name="play_disabled">#304030</color>
-    <color name="stop_enabled">#4080FF</color>
-    <color name="stop_disabled">#305090</color>
+    <color name="stop_enabled">#0080FF</color>
+    <color name="stop_disabled">#203060</color>
     <color name="rec_enabled">#D03030</color>
     <color name="rec_disabled">#503030</color>
+    <color name="heartbeat_enabled">#0080FF</color>
+    <color name="heartbeat_disabled">#203060</color>
 </resources>

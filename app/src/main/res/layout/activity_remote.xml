@@ -137,6 +137,18 @@
             app:tint="@color/rec_enabled"
             />
 
+        <ImageView
+            android:id="@+id/heartbeat_led"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/remote_human_desc"
+            app:layout_constraintTop_toTopOf="@+id/remote_human_desc"
+            app:srcCompat="@drawable/ic_baseline_record_24"
+            tools:tint="@color/stop_disabled"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

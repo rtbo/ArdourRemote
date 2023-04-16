@@ -33,6 +33,7 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
     }
 
     //    val connected = remote.connected
+    val heartbeat = remote.heartbeat
     val playing = remote.playing
     val stopped = remote.stopped
 
@@ -73,6 +74,21 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         value = RecordBtnStyle.OFF
     }
 
+    val recordLightOn = MediatorLiveData<Boolean>().apply {
+        fun update() {
+            val style = recordBtnStyle.value ?: return
+
+            when (style) {
+                RecordBtnStyle.OFF -> {
+                    value = false
+                }
+                RecordBtnStyle.SOLID -> {
+                    value = false
+                }
+            }
+        }
+    }
+
     val stopTrashEnabled = MediatorLiveData<Boolean>().apply {
         fun update() {
             Log.d(TAG, "Stop trash update")
@@ -90,13 +106,14 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         if (id == _connId)
             return
         viewModelScope.launch {
-            val conn = repo.getById(id)!!
-            _connection.postValue(conn)
-            _connId = conn.id
+            repo.getById(id)?.let {
+                _connection.postValue(it)
+                _connId = it.id
 
-            if (_connectionRequested) {
-                _connectionRequested = false
-                doConnect(conn)
+                if (_connectionRequested) {
+                    _connectionRequested = false
+                    doConnect(it)
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.channels.SendChannel
 const val FEEDBACK_STRIP_BUTTONS = 1
 const val FEEDBACK_STRIP_CONTROLS = 2
 const val FEEDBACK_PATH_SSID = 4
-const val FEEDBACK_HEART_BEAT = 8
+const val FEEDBACK_HEARTBEAT = 8
 const val FEEDBACK_MASTER_SECTION = 16
 const val FEEDBACK_PLAYHEAD_BBT = 32
 const val FEEDBACK_PLAYHEAD_SMPTE = 64
@@ -29,6 +29,7 @@ class OscRemote(private val scope: CoroutineScope) {
     private var _receiveJob: Job? = null
     private var _receiveChannel: ReceiveChannel<OscMessage>? = null
     private val _connected = MutableLiveData(false)
+    private val _heartbeat = MutableLiveData<Boolean>(false)
     private val _playing = MutableLiveData(false)
     private val _stopped = MutableLiveData(false)
     private val _speed = MutableLiveData(0.0f)
@@ -37,6 +38,7 @@ class OscRemote(private val scope: CoroutineScope) {
     private val _timecode = MutableLiveData<String>()
 
     val connected: LiveData<Boolean> = _connected
+    val heartbeat: LiveData<Boolean> = _heartbeat
     val playing: LiveData<Boolean> = _playing
     val stopped: LiveData<Boolean> = _stopped
     val speed: LiveData<Float> = _speed
@@ -50,7 +52,6 @@ class OscRemote(private val scope: CoroutineScope) {
         _socket = socket
 
         try {
-            sendInitialStateQuery()
 
             val channel = Channel<OscMessage>(16)
             _receiveChannel = channel
@@ -59,6 +60,9 @@ class OscRemote(private val scope: CoroutineScope) {
                 receiveProduceLoop(socket, channel)
             }
 
+            delay(500)
+
+            sendInitialStateQuery()
             _connected.postValue(true)
             Log.d("OSC", "Connected")
 
@@ -83,22 +87,28 @@ class OscRemote(private val scope: CoroutineScope) {
 
     suspend fun transportPlay() {
         sendMessage(OscMessage("/transport_play"))
+        //_playing.postValue(true)
+        //_stopped.postValue(false)
     }
 
     suspend fun transportStop() {
         sendMessage(OscMessage("/transport_stop"))
+        _playing.postValue(false)
+        _stopped.postValue(true)
     }
 
     suspend fun stopAndForget() {
         sendMessage(OscMessage("/stop_forget"))
+        sendMessage(OscMessage("/transport_speed"))
     }
 
     suspend fun recordToggle() {
         sendMessage(OscMessage("/rec_enable_toggle"))
+        sendMessage(OscMessage("/record_enabled"))
     }
 
     private suspend fun sendInitialStateQuery() {
-        val feedback = FEEDBACK_HEART_BEAT or FEEDBACK_PLAYHEAD_BBT or FEEDBACK_PLAYHEAD_TIME
+        val feedback = FEEDBACK_HEARTBEAT or FEEDBACK_PLAYHEAD_BBT or FEEDBACK_PLAYHEAD_TIME
         sendMessage(OscMessage("/set_surface/feedback", OscInt(feedback)))
         sendMessage(OscMessage("/transport_speed"))
         sendMessage(OscMessage("/record_enabled"))
@@ -133,6 +143,7 @@ class OscRemote(private val scope: CoroutineScope) {
     private fun dispatchRcvMessage(msg: OscMessage) {
         Log.d("OSC", "Received msg $msg")
         when (msg.address.value) {
+            "/heartbeat" -> _heartbeat.postValue(msg.args[0].float!! > 0.5f)
             "/position/bbt" -> _bbt.postValue(msg.args[0].string)
             "/position/time" -> _timecode.postValue(msg.args[0].string)
             "/transport_play" -> _playing.postValue(msg.args[0].int == 1)
@@ -145,7 +156,7 @@ class OscRemote(private val scope: CoroutineScope) {
                     _playing.postValue(speed == 1.0f)
                 }
             }
-            "/rec_enable_toggle" -> _recordEnabled.postValue(msg.args[0].int != 0)
+            "/record_enabled" -> _recordEnabled.postValue(msg.args[0].int != 0)
         }
     }
 }
