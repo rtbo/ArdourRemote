@@ -1,7 +1,12 @@
 package rtbo.ardourremote.view
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import rtbo.ardourremote.database.Connection
@@ -74,26 +79,10 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         value = RecordBtnStyle.OFF
     }
 
-    val recordLightOn = MediatorLiveData<Boolean>().apply {
-        fun update() {
-            val style = recordBtnStyle.value ?: return
-
-            when (style) {
-                RecordBtnStyle.OFF -> {
-                    value = false
-                }
-                RecordBtnStyle.SOLID -> {
-                    value = false
-                }
-            }
-        }
-    }
-
     val stopTrashEnabled = MediatorLiveData<Boolean>().apply {
         fun update() {
-            Log.d(TAG, "Stop trash update")
-            val play = remote.playing.value ?: return
-            val record = remote.recordEnabled.value ?: return
+            val play = remote.playing.value ?: false
+            val record = remote.recordEnabled.value ?: false
 
             value = play && record
         }

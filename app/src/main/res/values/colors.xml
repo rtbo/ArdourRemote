@@ -12,6 +12,8 @@
     <color name="play_disabled">#304030</color>
     <color name="stop_enabled">#0080FF</color>
     <color name="stop_disabled">#203060</color>
+    <color name="stop_forget_enabled">#A92A21</color>
+    <color name="stop_forget_disabled">#4F1C18</color>
     <color name="rec_enabled">#D03030</color>
     <color name="rec_disabled">#503030</color>
     <color name="heartbeat_enabled">#0080FF</color>

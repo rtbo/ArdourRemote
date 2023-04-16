@@ -4,8 +4,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -15,7 +13,8 @@ import androidx.core.widget.ImageViewCompat
 import dagger.hilt.android.AndroidEntryPoint
 import rtbo.ardourremote.R
 import rtbo.ardourremote.databinding.ActivityRemoteBinding
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 const val REMOTE_CONN_ID_KEY = "REMOTE_CONN_ID"
 
@@ -40,7 +39,7 @@ class RemoteActivity : AppCompatActivity() {
         val recDisabled =
             ColorStateList.valueOf(ContextCompat.getColor(baseContext, R.color.rec_disabled))
         var blinkTimer: Timer? = null
-        var blinkHandler = Handler(Looper.getMainLooper()) {
+        val blinkHandler = Handler(Looper.getMainLooper()) {
             val col = if (it.what == 1) {
                 recEnabled
             } else {
@@ -97,6 +96,25 @@ class RemoteActivity : AppCompatActivity() {
                 playDisabled
             }
             ImageViewCompat.setImageTintList(playBtn, col)
+        }
+
+        val stopForgetBtn = findViewById<ImageButton>(R.id.stop_forget_btn)
+        val stopForgetEnabled =
+            ColorStateList.valueOf(ContextCompat.getColor(baseContext, R.color.stop_forget_enabled))
+        val stopForgetDisabled =
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    baseContext,
+                    R.color.stop_forget_disabled
+                )
+            )
+        viewModel.stopTrashEnabled.observe(this) {
+            val col = if (it) {
+                stopForgetEnabled
+            } else {
+                stopForgetDisabled
+            }
+            ImageViewCompat.setImageTintList(stopForgetBtn, col)
         }
 
         val hbImg = findViewById<ImageView>(R.id.heartbeat_led)
