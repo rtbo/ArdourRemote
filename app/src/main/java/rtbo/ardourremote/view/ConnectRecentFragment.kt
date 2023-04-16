@@ -25,9 +25,9 @@ class ConnectRecentFragment : Fragment() {
         val list = view.findViewById<RecyclerView>(R.id.recent_connection_list)
         val listAdapter = ConnectionListAdapter()
         list.adapter = listAdapter
-        viewModel.connections.observe(viewLifecycleOwner, {
+        viewModel.connections.observe(viewLifecycleOwner) {
             listAdapter.connections = it
-        })
+        }
 
         val button = view.findViewById<FloatingActionButton>(R.id.connect_new_btn)
         button.setOnClickListener {

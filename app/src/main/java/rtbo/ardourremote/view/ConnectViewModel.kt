@@ -47,9 +47,7 @@ class ConnectViewModel @Inject constructor(private val repo: ConnectionRepo) : V
         ConnectionItemViewModel(
             idx,
             conn.id,
-            if (conn.name.isNotEmpty()) {
-                conn.name
-            } else {
+            conn.name.ifEmpty {
                 conn.host
             },
             conn.humanDesc,

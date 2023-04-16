@@ -15,7 +15,7 @@ class ConnectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect)
 
-        viewModel.connections.observe(this, {
+        viewModel.connections.observe(this) {
             val useRecent = it.isNotEmpty()
             supportFragmentManager.commit {
                 if (useRecent) {
@@ -25,6 +25,6 @@ class ConnectActivity : AppCompatActivity() {
                 }
                 setReorderingAllowed(true)
             }
-        })
+        }
     }
 }
