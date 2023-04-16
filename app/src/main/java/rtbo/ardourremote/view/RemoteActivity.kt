@@ -33,6 +33,10 @@ class RemoteActivity : AppCompatActivity() {
         val id = intent.extras?.getLong(REMOTE_CONN_ID_KEY)!!
         viewModel.setConnectionId(id)
 
+        viewModel.sessionName.observe(this) {
+            title = if (it.isNotEmpty()) "Ardour Remote - $it" else "Ardour Remote"
+        }
+
         val recBtn = findViewById<ImageButton>(R.id.record_toggle_btn)
         val recEnabled =
             ColorStateList.valueOf(ContextCompat.getColor(baseContext, R.color.rec_enabled))

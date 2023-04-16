@@ -37,6 +37,7 @@ class OscRemote(private val scope: CoroutineScope) {
     private var _receiveJob: Job? = null
     private var _receiveChannel: ReceiveChannel<OscMessage>? = null
     private val _connected = MutableLiveData(false)
+    private val _sessionName = MutableLiveData("")
     private val _heartbeat = MutableLiveData<Boolean>(false)
     private val _playing = MutableLiveData(false)
     private val _stopped = MutableLiveData(false)
@@ -46,6 +47,7 @@ class OscRemote(private val scope: CoroutineScope) {
     private val _timecode = MutableLiveData<String>()
 
     val connected: LiveData<Boolean> = _connected
+    val sessionName: LiveData<String> = _sessionName
     val heartbeat: LiveData<Boolean> = _heartbeat
     val playing: LiveData<Boolean> = _playing
     val stopped: LiveData<Boolean> = _stopped
@@ -163,6 +165,7 @@ class OscRemote(private val scope: CoroutineScope) {
             }
 
             "/rec_enable_toggle" -> _recordEnabled.postValue(msg.args[0].int != 0)
+            "/session_name" -> _sessionName.postValue(msg.args[0].string)
         }
     }
 }

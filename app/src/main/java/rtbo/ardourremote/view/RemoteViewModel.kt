@@ -37,6 +37,8 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         it.humanDesc
     }
 
+    val sessionName = remote.sessionName
+
     //    val connected = remote.connected
     val heartbeat = remote.heartbeat
     val playing = remote.playing
