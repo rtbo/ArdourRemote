@@ -23,4 +23,9 @@
     <string name="stop_transport_button">Stop transport button</string>
     <string name="start_transport">Start transport</string>
     <string name="transport_speed">Transport speed</string>
+    <string name="transport_to_end">Transport to end</string>
+    <string name="transport_to_next_bar">Transport to next bar</string>
+    <string name="transport_to_previous_bar">Transport to previous bar</string>
+    <string name="transport_to_start">Transport to start</string>
+    <string name="heartbeat">heart beat</string>
 </resources>

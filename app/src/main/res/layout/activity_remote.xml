@@ -72,6 +72,71 @@
             tools:text="x1.5"
             />
 
+
+        <ImageButton
+            android:id="@+id/to_start_btn"
+            android:layout_width="@dimen/icon_btn_size"
+            android:layout_height="@dimen/icon_btn_size"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/transport_to_start"
+            android:onClick="@{() -> model.toStart()}"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/prev_bar_btn"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timecode_txt"
+            app:srcCompat="@drawable/ic_baseline_double_bar_arrow_left"
+            app:tint="@color/black"
+            />
+
+        <ImageButton
+            android:id="@+id/prev_bar_btn"
+            android:layout_width="@dimen/icon_btn_size"
+            android:layout_height="@dimen/icon_btn_size"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/transport_to_previous_bar"
+            android:onClick="@{() -> model.toPrevBar()}"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/next_bar_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/to_start_btn"
+            app:layout_constraintTop_toTopOf="@+id/to_start_btn"
+            app:srcCompat="@drawable/ic_baseline_bar_arrow_left"
+            app:tint="@color/black"
+            />
+
+        <ImageButton
+            android:id="@+id/next_bar_btn"
+            android:layout_width="@dimen/icon_btn_size"
+            android:layout_height="@dimen/icon_btn_size"
+            android:contentDescription="@string/transport_to_next_bar"
+            android:onClick="@{() -> model.toNextBar()}"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/to_end_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/prev_bar_btn"
+            app:layout_constraintTop_toTopOf="@+id/prev_bar_btn"
+            app:srcCompat="@drawable/ic_baseline_bar_arrow_right"
+            app:tint="@color/black"
+            />
+
+        <ImageButton
+            android:id="@+id/to_end_btn"
+            android:layout_width="@dimen/icon_btn_size"
+            android:layout_height="@dimen/icon_btn_size"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/transport_to_end"
+            android:onClick="@{() -> model.toEnd()}"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/next_bar_btn"
+            app:layout_constraintTop_toTopOf="@+id/next_bar_btn"
+            app:srcCompat="@drawable/ic_baseline_double_bar_arrow_right"
+            app:tint="@color/black"
+            />
+
         <ImageButton
             android:id="@+id/record_toggle_btn"
             android:layout_width="@dimen/icon_btn_size"
@@ -82,26 +147,10 @@
             android:onClick="@{() -> model.recordToggle()}"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toStartOf="@+id/stop_btn"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timecode_txt"
+            app:layout_constraintTop_toBottomOf="@+id/to_start_btn"
             app:srcCompat="@drawable/ic_baseline_record_24"
-            />
-
-        <ImageButton
-            android:id="@+id/play_btn"
-            android:layout_width="@dimen/icon_btn_size"
-            android:layout_height="@dimen/icon_btn_size"
-            android:contentDescription="@string/start_transport"
-            android:onClick="@{() -> model.play()}"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toStartOf="@+id/stop_forget_btn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/stop_btn"
-            app:layout_constraintTop_toTopOf="@+id/stop_btn"
-            app:srcCompat="@drawable/ic_baseline_play_24"
-            app:tint="@color/play_disabled"
             />
 
         <ImageButton
@@ -118,6 +167,21 @@
             app:layout_constraintTop_toTopOf="@+id/record_toggle_btn"
             app:srcCompat="@drawable/ic_baseline_stop_24"
             app:tint="@color/stop_disabled"
+            />
+
+        <ImageButton
+            android:id="@+id/play_btn"
+            android:layout_width="@dimen/icon_btn_size"
+            android:layout_height="@dimen/icon_btn_size"
+            android:contentDescription="@string/start_transport"
+            android:onClick="@{() -> model.play()}"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/stop_forget_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/stop_btn"
+            app:layout_constraintTop_toTopOf="@+id/stop_btn"
+            app:srcCompat="@drawable/ic_baseline_play_24"
+            app:tint="@color/play_disabled"
             />
 
         <ImageButton
@@ -146,7 +210,8 @@
             app:layout_constraintEnd_toStartOf="@+id/remote_human_desc"
             app:layout_constraintTop_toTopOf="@+id/remote_human_desc"
             app:srcCompat="@drawable/ic_baseline_record_24"
-            tools:tint="@color/stop_disabled"
+            app:tint="@color/stop_disabled"
+            android:contentDescription="@string/heartbeat"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

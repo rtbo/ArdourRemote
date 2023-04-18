@@ -95,6 +95,18 @@ class OscRemote(private val scope: CoroutineScope) {
         _receiveChannel = null
     }
 
+    suspend fun transportToStart() {
+        sendMessage(OscMessage("/goto_start"))
+    }
+
+    suspend fun transportToEnd() {
+        sendMessage(OscMessage("/goto_end"))
+    }
+
+    suspend fun transportJumpBars(bars: Int) {
+        sendMessage(OscMessage("/jump_bars", OscInt(bars)))
+    }
+
     suspend fun transportPlay() {
         sendMessage(OscMessage("/transport_play"))
     }

@@ -135,6 +135,30 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         }
     }
 
+    fun toStart() {
+        viewModelScope.launch {
+            remote.transportToStart()
+        }
+    }
+
+    fun toEnd() {
+        viewModelScope.launch {
+            remote.transportToEnd()
+        }
+    }
+
+    fun toPrevBar() {
+        viewModelScope.launch {
+            remote.transportJumpBars(-1)
+        }
+    }
+
+    fun toNextBar() {
+        viewModelScope.launch {
+            remote.transportJumpBars(1)
+        }
+    }
+
     fun play() {
         viewModelScope.launch {
             remote.transportPlay()
