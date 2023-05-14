@@ -1,0 +1,36 @@
+package rtbo.ardourremote.ui.theme
+
+import androidx.compose.ui.graphics.Color
+
+val md2014_red_50 = Color(0xFFFFEBEE)
+val md2014_red_100 = Color(0xFFFFCDD2)
+val md2014_red_200 = Color(0xFFEF9A9A)
+val md2014_red_300 = Color(0xFFE57373)
+val md2014_red_400 = Color(0xFFEF5350)
+val md2014_red_500 = Color(0xFFF44336)
+val md2014_red_600 = Color(0xFFE53935)
+val md2014_red_700 = Color(0xFFD32F2F)
+val md2014_red_800 = Color(0xFFC62828)
+val md2014_red_900 = Color(0xFFB71C1C)
+
+val md2014_blue_50 = Color(0xFFE3F2FD)
+val md2014_blue_100 = Color(0xFFBBDEFB)
+val md2014_blue_200 = Color(0xFF90CAF9)
+val md2014_blue_300 = Color(0xFF64B5F6)
+val md2014_blue_400 = Color(0xFF42A5F5)
+val md2014_blue_500 = Color(0xFF2196F3)
+val md2014_blue_600 = Color(0xFF1E88E5)
+val md2014_blue_700 = Color(0xFF1976D2)
+val md2014_blue_800 = Color(0xFF1565C0)
+val md2014_blue_900 = Color(0xFF0D47A1)
+
+val md2014_green_50 = Color(0xFFE8F5E9)
+val md2014_green_100 = Color(0xFFC8E6C9)
+val md2014_green_200 = Color(0xFFA5D6A7)
+val md2014_green_300 = Color(0xFF81C784)
+val md2014_green_400 = Color(0xFF66BB6A)
+val md2014_green_500 = Color(0xFF4CAF50)
+val md2014_green_600 = Color(0xFF43A047)
+val md2014_green_700 = Color(0xFF388E3C)
+val md2014_green_800 = Color(0xFF2E7D32)
+val md2014_green_900 = Color(0xFF1B5E20)

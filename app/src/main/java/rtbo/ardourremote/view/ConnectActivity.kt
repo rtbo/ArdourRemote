@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import rtbo.ardourremote.R
+import rtbo.ardourremote.ui.remote.REMOTE_CONN_ID_KEY
+import rtbo.ardourremote.ui.remote.RemoteActivity
 
 @AndroidEntryPoint
 class ConnectActivity : AppCompatActivity() {

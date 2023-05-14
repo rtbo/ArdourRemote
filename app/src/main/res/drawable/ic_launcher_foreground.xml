@@ -12,7 +12,7 @@
       android:strokeAlpha="0.5"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.26"
-      android:fillColor="#0fcb0f"
+      android:fillColor="#2fff2f"
       android:fillAlpha="0.5"
       android:strokeLineCap="butt"/>
 </vector>

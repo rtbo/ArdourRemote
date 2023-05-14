@@ -52,7 +52,7 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
     val speedTxt: LiveData<String> = remote.speed.map {
         Log.d(TAG, "speed update $it")
         if (it != 0.0f && it != 1.0f) {
-            "x $it"
+            "x$it"
         } else {
             ""
         }
@@ -147,6 +147,12 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
         }
     }
 
+    fun jumpBars(bars: Int) {
+        viewModelScope.launch {
+            remote.transportJumpBars(bars)
+        }
+    }
+
     fun toPrevBar() {
         viewModelScope.launch {
             remote.transportJumpBars(-1)
@@ -172,6 +178,7 @@ class RemoteViewModel @Inject constructor(private val repo: ConnectionRepo) : Vi
     }
 
     fun recordToggle() {
+        Log.d(TAG, "recordToggle")
         viewModelScope.launch {
             remote.recordToggle()
         }
